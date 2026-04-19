@@ -9,7 +9,7 @@
 1. Phạm Thanh Trúc: Thêm màu sắc với thư viện window.h( Thiết kế giao diện console.)
 2. Lê Đình Sơn: 
 3. Phạm Minh Phúc: Xử lý logic thắng thua.
-4. Dương Đình Khác: 
+4. Dương Đình Khách: 
 
 ## Cách chạy chương trình
 1. Mở file .c bằng Dev-C++ hoặc VS Code.
