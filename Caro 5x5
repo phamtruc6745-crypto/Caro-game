@@ -13,6 +13,7 @@ typedef enum {
 // Khai bao ham
 void initBoard(Stone board[SIZE][SIZE]);
 void displayBoard(Stone board[SIZE][SIZE]);
+bool checkWinner(Stone board[SIZE][SIZE], int row, int col, Stone player);
 
 int main() {
     // 2. Su dung mang 2 chieu de bieu dien trang thai ban co
@@ -51,6 +52,13 @@ int main() {
         moves++;
         
         // TODO: Viet them ham checkWinner() o day de kiem tra thang thua
+
+        // Kiem tra thang
+        if (checkWinner(board, row, col, currentPlayer)) {
+            displayBoard(board);
+            printf("Quan %s thang!\n", (currentPlayer == BLACK) ? "DEN" : "TRANG");
+            return 0;
+}
         
         // Doi luot
         currentPlayer = (currentPlayer == BLACK) ? WHITE : BLACK;
@@ -89,4 +97,36 @@ void displayBoard(Stone board[SIZE][SIZE]) {
         printf("\n");
     }
     printf("\n");
+}
+
+//Ham kiem tra chien thang 
+bool checkWinner(Stone board[SIZE][SIZE], int row, int col, Stone player) {
+    int count;
+    int WIN = 5;
+
+    // Kiem tra hang
+    count = 1;
+    for (int j = col - 1; j >= 0 && board[row][j] == player; j--) count++;
+    for (int j = col + 1; j < SIZE && board[row][j] == player; j++) count++;
+    if (count >= WIN) return true;
+
+    // Kiem tra cot
+    count = 1;
+    for (int i = row - 1; i >= 0 && board[i][col] == player; i--) count++;
+    for (int i = row + 1; i < SIZE && board[i][col] == player; i++) count++;
+    if (count >= WIN) return true;
+
+    // Kiem tra duong cheo chinh (\)
+    count = 1;
+    for (int i = 1; row - i >= 0 && col - i >= 0 && board[row - i][col - i] == player; i++) count++;
+    for (int i = 1; row + i < SIZE && col + i < SIZE && board[row + i][col + i] == player; i++) count++;
+    if (count >= WIN) return true;
+
+    // Kiem tra duong cheo phu (/)
+    count = 1;
+    for (int i = 1; row - i >= 0 && col + i < SIZE && board[row - i][col + i] == player; i++) count++;
+    for (int i = 1; row + i < SIZE && col - i >= 0 && board[row + i][col - i] == player; i++) count++;
+    if (count >= WIN) return true;
+
+    return false;
 }
