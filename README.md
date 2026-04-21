@@ -7,7 +7,7 @@
 
 ## Thành viên và nhiệm vụ
 1. Phạm Thanh Trúc: Thêm màu sắc với thư viện window.h( Thiết kế giao diện console.)
-2. Lê Đình Sơn: 
+2. Lê Đình Sơn: Thiết lập tính năng Save/Load Game. Quản lý Leaderboard (Bảng xếp hạng).
 3. Phạm Minh Phúc: Xử lý logic thắng thua.
 4. Dương Đình Khánh: 
 
