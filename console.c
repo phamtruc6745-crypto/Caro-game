@@ -80,7 +80,7 @@ void setTextColor(int color) {
 // Nang cap: Them tham so toa do X, Y va thoi gian
 void drawStatusBar(int cursorX, int cursorY, int timeRemaining) {
     int consoleWidth = 80;  // Chieu ngang console
-    int consoleHeight = 35; // Dong duoi cung
+    int consoleHeight = 26; // Dong duoi cung
 
     // Luu lai vi tri con tro hien tai (de sau khi ve xong status bar, tra con tro ve cho cu)
     CONSOLE_SCREEN_BUFFER_INFO csbi;
