@@ -2,12 +2,15 @@
 #define GAME_H
 
 #include <stdbool.h>
-#include <cau_truc_du_lieu.h>
+#include "cau_truc_du_lieu.h" // Ket noi voi he thong du lieu chuan
 
-// --- CAU HINH GAME MAC DINH ---
-#define BOARD_SIZE 15
+/* ================================================================
+ * game.h
+ * Chuc nang: Luu tru cac hang so giao dien (UI) va khai bao
+ * nguyen mau ham cho Console, Ban co, va Logic game.
+ * ================================================================ */
 
-// --- CHUOI THOAT ANSI ---
+// --- CHUOI THOAT ANSI (Dung de to mau tren Console) ---
 #define ANSI_RESET   "\x1B[0m"
 #define ANSI_CLEAR   "\x1B[2J\x1B[H"
 #define ANSI_RED     "\x1B[91m"
@@ -16,45 +19,24 @@
 #define ANSI_YELLOW  "\x1B[93m" 
 #define ANSI_BG_DARK "\x1B[100m"
 
-// --- KY TU VE HOP ---
+// --- KY TU VE HOP (Ve ban co) ---
 #define H_LINE "\xE2\x94\x80"
 #define V_LINE "\xE2\x94\x82"
 #define CROSS  "\xE2\x94\xBC"
 
-// --- CAU TRUC DU LIEU ---
-typedef struct {
-    int row;
-    int col;
-    Stone player;
-} Move;
-
-typedef struct {
-    int blackWins;
-    int whiteWins;
-    int draws;
-} ScoreBoard;
-
-// Thêm vào sau struct
-extern Stone board[BOARD_SIZE][BOARD_SIZE];
-extern ScoreBoard gameScore;
-
 // --- KHAI BAO NGUYEN MAU HAM (API) ---
 
-// Console
+/* === Giao dien Console (console.c) === */
 void setupWindowsConsole();
 int showSplashScreen(); 
+void drawStatusBar(int cursorX, int cursorY, int timeRemaining); 
 
-// Ban co (Da them tham so int size)
-void initBoard(char board[BOARD_SIZE][BOARD_SIZE], int size);
-void displayBoard(char board[BOARD_SIZE][BOARD_SIZE], int size, int cursorRow, int cursorCol);
+/* === Quan ly Ban co (board.c) === */
+void initBoard(char ban_co[KICH_THUOC_BAN_CO][KICH_THUOC_BAN_CO], int size);
+void displayBoard(char ban_co[KICH_THUOC_BAN_CO][KICH_THUOC_BAN_CO], int size, int cursorRow, int cursorCol);
 
-// Logic (Da them tham so int size)
-int countDirection(char board[BOARD_SIZE][BOARD_SIZE], int size, int r, int c, int dr, int dc, Stone player);
-bool checkWinner(char board[BOARD_SIZE][BOARD_SIZE], int size, int lastRow, int lastCol, Stone player);
+/* === Logic Game (logic.c) === */
+int countDirection(char ban_co[KICH_THUOC_BAN_CO][KICH_THUOC_BAN_CO], int size, int r, int c, int dr, int dc, char player);
+bool checkWinner(char ban_co[KICH_THUOC_BAN_CO][KICH_THUOC_BAN_CO], int size, int lastRow, int lastCol, char player);
 
-// Diem so
-void loadScore(ScoreBoard *sb);
-void saveScore(ScoreBoard sb);
-void updateScore(ScoreBoard *sb, Stone winner);
-
-#endif // GAME_H
+#endif /* GAME_H */
