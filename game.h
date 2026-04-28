@@ -2,57 +2,41 @@
 #define GAME_H
 
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "cau_truc_du_lieu.h" // Ket noi voi he thong du lieu chuan
 
-// --- CAU HINH ---
-#define BOARD_SIZE 15
-#define WIN_COUNT 5
+/* ================================================================
+ * game.h
+ * Chuc nang: Luu tru cac hang so giao dien (UI) va khai bao
+ * nguyen mau ham cho Console, Ban co, va Logic game.
+ * ================================================================ */
 
-// Thong nhat dung char de de hien thi
-typedef char Stone;
-#define STONE_X 'X'
-#define STONE_O 'O'
-#define STONE_NA ' '
-
-// --- CAU TRUC DU LIEU ---
-typedef struct {
-    int row;
-    int col;
-    Stone player;
-} Move;
-
-typedef struct {
-    Move data[BOARD_SIZE * BOARD_SIZE];
-    int top;
-} Stack;
-
-typedef struct {
-    int blackWins;
-    int whiteWins;
-    int draws;
-} ScoreBoard;
-
-// --- MA MAU ANSI ---
+// --- CHUOI THOAT ANSI (Dung de to mau tren Console) ---
 #define ANSI_RESET   "\x1B[0m"
 #define ANSI_CLEAR   "\x1B[2J\x1B[H"
 #define ANSI_RED     "\x1B[91m"
 #define ANSI_CYAN    "\x1B[96m"
-#define ANSI_YELLOW  "\x1B[93m"
 #define ANSI_GRAY    "\x1B[90m"
+#define ANSI_YELLOW  "\x1B[93m" 
+#define ANSI_BG_DARK "\x1B[100m"
 
-// --- KHAI BAO HAM ---
+// --- KY TU VE HOP (Ve ban co) ---
+#define H_LINE "\xE2\x94\x80"
+#define V_LINE "\xE2\x94\x82"
+#define CROSS  "\xE2\x94\xBC"
+
+// --- KHAI BAO NGUYEN MAU HAM (API) ---
+
+/* === Giao dien Console (console.c) === */
 void setupWindowsConsole();
-int showSplashScreen();
-void initBoard(Stone board[BOARD_SIZE][BOARD_SIZE], int size);
-void displayBoard(Stone board[BOARD_SIZE][BOARD_SIZE], int size, int cursorRow, int cursorCol);
-bool checkWinner(Stone board[BOARD_SIZE][BOARD_SIZE], int size, int r, int c, Stone player);
-void drawStatusBar(int cursorX, int cursorY, int timeRemaining);
+int showSplashScreen(); 
+void drawStatusBar(int cursorX, int cursorY, int timeRemaining); 
 
-// Stack functions
-void initStack(Stack *s);
-bool pushMove(Stack *s, Move m);
-bool popMove(Stack *s, Move *m);
+/* === Quan ly Ban co (board.c) === */
+void initBoard(char ban_co[KICH_THUOC_BAN_CO][KICH_THUOC_BAN_CO], int size);
+void displayBoard(char ban_co[KICH_THUOC_BAN_CO][KICH_THUOC_BAN_CO], int size, int cursorRow, int cursorCol);
 
-#endif
+/* === Logic Game (logic.c) === */
+int countDirection(char ban_co[KICH_THUOC_BAN_CO][KICH_THUOC_BAN_CO], int size, int r, int c, int dr, int dc, char player);
+bool checkWinner(char ban_co[KICH_THUOC_BAN_CO][KICH_THUOC_BAN_CO], int size, int lastRow, int lastCol, char player);
+
+#endif /* GAME_H */
