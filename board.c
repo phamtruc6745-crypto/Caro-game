@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/game.h"
+#include "game.h"
 
 // Khoi tao mang theo kich thuoc thuc te duoc chon
 void initBoard(Stone board[BOARD_SIZE][BOARD_SIZE], int size) {
