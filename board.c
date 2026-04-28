@@ -5,7 +5,7 @@
 void initBoard(Stone board[BOARD_SIZE][BOARD_SIZE], int size) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            board[i][j] = NA;
+            board[i][j] = ' ';
         }
     }
 }
@@ -22,11 +22,11 @@ void displayBoard(Stone board[BOARD_SIZE][BOARD_SIZE], int size, int cursorRow, 
             
             bool isCursor = (i == cursorRow && j == cursorCol);
             
-            if (board[i][j] == NA) {
+            if (board[i][j] == ' ') {
                 if (isCursor) printf("\x1B[100m   \x1B[0m"); 
                 else printf("   ");
             } 
-            else if (board[i][j] == BLACK) {
+            else if (board[i][j] == 'X') {
                 if (isCursor) printf("\x1B[100;91m X \x1B[0m"); 
                 else printf(" \x1B[91mX\x1B[0m ");
             } 
