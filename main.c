@@ -13,11 +13,8 @@ int main() {
     
     // --- 2. KHOI TAO BAN CO ---
     // Khai bao mang voi kich thuoc toi da la BOARD_SIZE (15) de tranh loi bo nho
-    Stone board[BOARD_SIZE][BOARD_SIZE]; 
     initBoard(board, currentSize); // Truyen currentSize vao de chi khoi tao vung choi
-        
-    Move history[BOARD_SIZE * BOARD_SIZE];
-    int moveCount = 0; 
+    
     // So nuoc di toi da bay gio phu thuoc vao kich thuoc ban co da chon
     int maxMoves = currentSize * currentSize; 
     
