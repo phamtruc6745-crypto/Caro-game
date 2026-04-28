@@ -1,12 +1,19 @@
 #include "game.h"
+#include "luu_tai_game.h"
+#include "bang_xep_hang.h"
 #include <conio.h>
 
 int main() {
     setupWindowsConsole();
     
-    // 1. Load bảng điểm từ file 
-    ScoreBoard globalScore = {0, 0, 0}; 
-    // loadScore(&globalScore); // Bỏ comment khi bạn đã sửa xong file luu_tai_game.c
+    // ================= MỤC 2: NHẬP TÊN NGƯỜI CHƠI =================
+    char player1[50], player2[50];
+    printf("%s", ANSI_CLEAR);
+    printf("        --- CHAO MUNG DEN VOI CARO ---\n\n");
+    printf(" Nhap ten Nguoi choi 1 (Quan X): ");
+    scanf("%49s", player1);
+    printf(" Nhap ten Nguoi choi 2 (Quan O): ");
+    scanf("%49s", player2);
 
     int currentSize = showSplashScreen();
     
@@ -24,11 +31,11 @@ int main() {
 
     while (gameRunning && moveCount < maxMoves) {
         printf("%s", ANSI_CLEAR);
-        printf("=== CARO %dx%d | X: %d - O: %d ===\n", currentSize, currentSize, globalScore.blackWins, globalScore.whiteWins);
+        printf("=== CARO %dx%d | %s (X) vs %s (O) ===\n", currentSize, currentSize, player1, player2);
         displayBoard(board, currentSize, cursorRow, cursorCol);
         drawStatusBar(cursorCol, cursorRow, 0);
 
-        printf("\n[S]: Luu Game | [U]: Hoan tac | [Space]: Danh");
+        printf("\n[S]: Luu Game | [U]: Hoan tac | [Space/Enter]: Danh");
 
         int ch = _getch();
         if (ch == 224) { 
@@ -39,10 +46,25 @@ int main() {
             if (ch == 77 && cursorCol < currentSize - 1) cursorCol++;
         } 
         else if (ch == 's' || ch == 'S') {
-            // Gọi hàm luu_game 
-            printf("\nDang luu game...");
-            // luu_van_co(...); 
-            _getch();
+            // ================= TÍCH HỢP LƯU GAME =================
+            TrangThaiVanCo data;
+            strcpy(data.nguoi_choi_1.ten, player1);
+            strcpy(data.nguoi_choi_2.ten, player2);
+            data.kich_thuoc_thuc_te = currentSize; 
+            data.luot_hien_tai = currentPlayer;
+            data.so_nuoc_da_di = history.top + 1;
+            
+            for(int i = 0; i < BOARD_SIZE; i++)
+                for(int j = 0; j < BOARD_SIZE; j++)
+                    data.ban_co[i][j] = board[i][j];
+                    
+            for(int i = 0; i <= history.top; i++)
+                data.lich_su_nuoc_di[i] = history.data[i];
+
+            if(luu_van_co(&data, FILE_LUU_GAME)) {
+                printf("\nDa luu game thanh cong! Nhan phim bat ky de tiep tuc...");
+                _getch();
+            }
         }
         else if (ch == 'u' || ch == 'U') {
             Move m;
@@ -63,12 +85,15 @@ int main() {
                 if (checkWinner(board, currentSize, cursorRow, cursorCol, currentPlayer)) {
                     printf("%s", ANSI_CLEAR);
                     displayBoard(board, currentSize, cursorRow, cursorCol);
-                    printf("\nCHUC MUNG %s [%c] THANG!\n", (currentPlayer == STONE_X) ? "RED" : "CYAN", currentPlayer);
                     
-                    // Cập nhật bảng điểm
-                    if (currentPlayer == STONE_X) globalScore.blackWins++;
-                    else globalScore.whiteWins++;
-                    // saveScore(globalScore);
+                    // Xác định ai là người thắng
+                    char* winnerName = (currentPlayer == STONE_X) ? player1 : player2;
+                    char* loserName = (currentPlayer == STONE_X) ? player2 : player1;
+                    
+                    printf("\nCHUC MUNG %s [%c] THANG!\n", winnerName, currentPlayer);
+                    
+                    // ================= TÍCH HỢP BẢNG XẾP HẠNG =================
+                    cap_nhat_ket_qua(winnerName, loserName, NULL, NULL, 0);
 
                     gameRunning = false;
                 }
@@ -76,7 +101,13 @@ int main() {
             }
         }
     }
-    printf("\nNhan phim bat ky de ket thuc...");
+    
+    printf("\nNhan phim bat ky de xem Bang Xep Hang...");
+    _getch();
+    printf("%s", ANSI_CLEAR);
+    hien_thi_bang_xep_hang(); // In bảng xếp hạng ra
+    
+    printf("\nNhan phim bat ky de thoat...");
     _getch();
     return 0;
 }
