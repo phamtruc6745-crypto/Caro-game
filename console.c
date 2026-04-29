@@ -1,19 +1,23 @@
-#include "../include/game.h"
+#include "game.h" 
 #include <windows.h> 
 #include <stdio.h>
 #include <string.h>
-#include <conio.h> // Thu vien bat buoc phai co cho _getch()
+#include <conio.h> 
 
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
+
 // day la ham giup console hieu duoc cac ma dieu khien nhu ma mau sac, di chuyen con tro,....
 void setupWindowsConsole() {
+    // Ép console mở rộng ra 90 cột x 40 dòng
+    system("mode con cols=90 lines=40");
+
     SetConsoleOutputCP(CP_UTF8); 
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);// day la chia khoa de mo ra quyen can thiep vao console
-    if (hOut != INVALID_HANDLE_VALUE) { // kiem tra xem co du dieu kien de cap chia khoa chua 
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut != INVALID_HANDLE_VALUE) {  
         DWORD dwMode = 0;
-        if (GetConsoleMode(hOut, &dwMode)) { // ktr xem he thong da cho phep doc cau hinh hien tai cua console 
+        if (GetConsoleMode(hOut, &dwMode)) {  
             dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
             SetConsoleMode(hOut, dwMode); 
         }
@@ -28,7 +32,7 @@ int showSplashScreen() {
     while(1) {
         printf("%s", ANSI_CLEAR);
         
-        // 1. IN LOGO NGAY LAP TUC (Khong dung Sleep de menu khong bi giat)
+        // 1. IN LOGO NGAY LAP TUC 
         printf("%s", ANSI_CYAN);
         printf("  \\   /       ____    _    ____   ___         ___  \n"); 
         printf("   \\ /       / ___|  / \\  |  _ \\ / _ \\       /   \\ \n"); 
@@ -44,7 +48,6 @@ int showSplashScreen() {
         
         for(int i = 0; i < 3; i++) {
             if(i == choice) {
-                // To mau vang cho muc dang duoc chon
                 printf("    %s > BAN CO %dx%d <%s\n", ANSI_YELLOW, options[i], options[i], ANSI_RESET);
             } else {
                 printf("      BAN CO %dx%d\n", options[i], options[i]);
@@ -57,15 +60,14 @@ int showSplashScreen() {
         int ch = _getch();
         if (ch == 224 || ch == 0) {
             ch = _getch();
-            if (ch == 72 && choice > 0) choice--;    // Mui ten Len
-            if (ch == 80 && choice < 2) choice++;    // Mui ten Xuong
-        } else if (ch == 13 || ch == 32) {           // Phim Enter hoac Space
-            return options[choice]; // Tra ve ket qua 3, 5 hoac 15 cho ham main
+            if (ch == 72 && choice > 0) choice--;    
+            if (ch == 80 && choice < 2) choice++;    
+        } else if (ch == 13 || ch == 32) {           
+            return options[choice]; 
         }
     }
 }
-// thêm hàm hiển thị thanh trạng thái ( ý tưởng mới cho giao diện đỡ trống trải)
-// Ham di chuyen con tro (gotoXY) va doi mau (setTextColor) giu nguyen nhu cu
+
 void gotoXY(int x, int y) {
     COORD coord;
     coord.X = x;
@@ -79,37 +81,30 @@ void setTextColor(int color) {
 
 // Nang cap: Them tham so toa do X, Y va thoi gian
 void drawStatusBar(int cursorX, int cursorY, int timeRemaining) {
-    int consoleWidth = 80;  // Chieu ngang console
-    int consoleHeight = 26; // Dong duoi cung
+    int consoleWidth = 85;  // FIX: Tăng chiều ngang một chút cho cân đối
+    int consoleHeight = 35; // FIX LỖI NHẢY Ô: Đẩy thanh trạng thái xuống dòng 35
 
-    // Luu lai vi tri con tro hien tai (de sau khi ve xong status bar, tra con tro ve cho cu)
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
     int oldX = csbi.dwCursorPosition.X;
     int oldY = csbi.dwCursorPosition.Y;
 
-    // Di chuyen xuong dong cuoi cung de ve
     gotoXY(0, consoleHeight);
-    setTextColor(240); // Mau nen noi bat (Vi du: Nen trang, chu den)
+    setTextColor(240); 
 
-    // Tao mang ky tu de chua chuoi da ghep thong so
     char statusText[100];
     
-    // Ghep thong tin dong vao chuoi
-    // %02d giup in so luon co 2 chu so (VD: 05, 12) cho dep mat
-    sprintf(statusText, " GVHD: Th.s Tran Thi Dung | Nhom nhung con bo | Toa do: (%02d, %02d) | Thoi gian: %02ds ", 
-            cursorX, cursorY, timeRemaining);
+    
+    sprintf(statusText, " GVHD: Th.s Tran Thi Dung | Nhom nhung con bo | Toa do: (%02d, %02d) | [S] Luu - [U] Undo ", 
+            cursorX, cursorY);
 
-    // In chuoi ra man hinh
     printf("%s", statusText);
 
-    // Xoa/phu mau nen cho phan khoang trong con lai ben phai
     for (int i = strlen(statusText); i < consoleWidth; i++) {
         printf(" ");
     }
 
-    // Reset mau va tra con tro ve vi tri cu tren ban co
     setTextColor(7); 
     gotoXY(oldX, oldY);
-    fflush(stdout); // lenh ep console hien thi ngay lap tuc ham vua in
+    fflush(stdout); 
 }
