@@ -30,7 +30,7 @@ int main() {
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
 
     bool can_ve_lai = true; 
-    printf("%s", ANSI_CLEAR); // Dọn sạch màn hình 1 lần duy nhất
+    printf("%s", ANSI_CLEAR); // Don sach man hinh 1 lan duy nhat
 
     while (!van_co.game_da_ket_thuc) {
         if (can_ve_lai) {
@@ -40,8 +40,8 @@ int main() {
                 cc = van_co.lich_su_nuoc_di[van_co.so_nuoc_da_di-1].cot;
             }
 
-            // [SỬA LỖI CHÍNH]: Dùng hàm này để đưa con trỏ về gốc (0,0) tuyệt đối của Buffer
-            // Bàn cờ sẽ bị "đóng đinh", không bao giờ bị trượt tọa độ nữa
+            // [SUA LOI CHINH]: Dung ham nay de dua con tro ve goc (0,0) tuyet doi cua Buffer
+            // Ban co se bi "dong dinh", khong bao gio bi truot toa do nua
             dat_con_tro_ve_dau(); 
             hien_thi_ban_co(van_co.ban_co, van_co.kich_thuoc, hct, cct, hc, cc);
             ve_thanh_trang_thai(cct, hct, van_co.luot_hien_tai);
@@ -55,7 +55,7 @@ int main() {
 
         bool danh = false;
 
-        // XỬ LÝ PHÍM & ENTER
+        // XU LY PHIM & ENTER
         if (sk.EventType == KEY_EVENT && sk.Event.KeyEvent.bKeyDown) {
             int p = sk.Event.KeyEvent.wVirtualKeyCode;
             char k = sk.Event.KeyEvent.uChar.AsciiChar;
@@ -67,31 +67,35 @@ int main() {
             else if (k == 'u' || k == 'U') thuc_hien_hoan_tac(&van_co, &hct, &cct);
             else if (k == 's' || k == 'S') { 
                 luu_van_co(&van_co, FILE_LUU_GAME); 
-                printf("\nDa luu thanh cong!      "); 
+                
+                // Doi \n thanh \r de in de tai cho
+                // Giai phap nay ngan chan hoan toan viec man hinh Terminal bi cuon xuong
+                printf("\rDa luu thanh cong!      "); 
+                
                 Sleep(800); 
                 printf("%s", ANSI_CLEAR); 
             }
-            // Nhận diện đánh cờ bằng Enter (VK_RETURN), Phím cách (Space), hoặc gõ X/O
+            // Nhan dien danh co bang Enter (VK_RETURN), Phim cach (Space), hoac go X/O
             else if (p == VK_RETURN || k == 32 || k == 'x' || k == 'X' || k == 'o' || k == 'O') danh = true;
             
             can_ve_lai = true; 
         }
-        // XỬ LÝ CHUỘT
+        // XU LY CHUOT
         else if (sk.EventType == MOUSE_EVENT) {
             if (sk.Event.MouseEvent.dwEventFlags == 0 || sk.Event.MouseEvent.dwEventFlags == DOUBLE_CLICK) {
                 if (sk.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
                     
-                    // [SỬA LỖI CHÍNH]: Vì bàn cờ bắt đầu chính xác từ gốc Buffer
-                    // Lấy thẳng tọa độ tuyệt đối dwMousePosition, loại bỏ bù trừ sai lệch
+                    // [SUA LOI CHINH]: Vi ban co bat dau chinh xac tu goc Buffer
+                    // Lay thang toa do tuyet doi dwMousePosition, loai bo bu tru sai lech
                     int mx = sk.Event.MouseEvent.dwMousePosition.X;
                     int my = sk.Event.MouseEvent.dwMousePosition.Y;
 
-                    // Công thức chuẩn khớp với bàn cờ có đường kẻ ngang
+                    // Cong thuc chuan khop voi ban co co duong ke ngang
                     if (mx >= 5 && my >= 1) {
                         int c_clk = (mx - 5) / 4;
                         int h_clk = (my - 1) / 2;
                         
-                        // Nếu bấm hợp lệ, di chuyển con trỏ và đánh ngay lập tức
+                        // Neu bam hop le, di chuyen con tro va danh ngay lap tuc
                         if (h_clk >= 0 && h_clk < van_co.kich_thuoc && c_clk >= 0 && c_clk < van_co.kich_thuoc) { 
                             hct = h_clk; 
                             cct = c_clk; 
@@ -103,7 +107,7 @@ int main() {
             }
         }
 
-        // LOGIC KIỂM TRA ĐÁNH CỜ
+        // LOGIC KIEM TRA DANH CO
         if (danh && van_co.ban_co[hct][cct] == ' ') {
             van_co.ban_co[hct][cct] = van_co.luot_hien_tai;
             van_co.lich_su_nuoc_di[van_co.so_nuoc_da_di++] = (MotNuocDi){hct, cct, van_co.luot_hien_tai};
@@ -119,7 +123,7 @@ int main() {
         }
     }
 
-    // Kết thúc game
+    // Ket thuc game
     printf("%s", ANSI_CLEAR);
     hien_thi_ban_co(van_co.ban_co, van_co.kich_thuoc, hct, cct, -1, -1);
     if (van_co.nguoi_thang == 'H') cap_nhat_ket_qua(NULL, NULL, van_co.nguoi_choi_1.ten, van_co.nguoi_choi_2.ten, 1);
