@@ -1,32 +1,18 @@
-#ifndef GIAO_DIEN_H
-#define GIAO_DIEN_H
+#ifndef GIAODIEN_H
+#define GIAODIEN_H
 
-#include "cau_truc_du_lieu.h"
+#include "cautruc.h"
+#include <stdbool.h>
 
-// Dinh nghia cac ma mau ANSI de lam giao dien dep hon
-#define ANSI_RESET      "\x1B[0m"
-#define ANSI_CLEAR      "\x1B[2J\x1B[H"
-#define ANSI_HOME       "\x1B[H"         
-#define ANSI_RED        "\x1B[91;1m"   // Do sang cho X
-#define ANSI_CYAN       "\x1B[96;1m"   // Xanh sang cho O
-#define ANSI_GREEN      "\x1B[92;1m"
-#define ANSI_YELLOW     "\x1B[93;1m"
-#define ANSI_MAGENTA    "\x1B[95;1m"
-#define ANSI_BG_YELLOW  "\x1B[43m"
-#define ANSI_BG_BLUE    "\x1B[44m"     // Nen xanh cho thanh trang thai
-#define ANSI_BLACK      "\x1B[30m"
-#define ANSI_WHITE_BOLD "\x1B[97;1m"
+// Toa do dong bat dau cua hang 0 tren ban co (duoc do dong sau moi lan ve)
+// Dung thay cho TOA_DO_Y_BAT_DAU de tranh loi lech do man hinh scroll
+extern int g_hangBatDauBanCo;
+extern int g_toaDoY_Prompt;
 
-// Su dung ky tu UTF-8 ve vien bang co cho dep va lien mach
-#define H_LINE "\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80" // ---
-#define V_LINE "\xE2\x94\x82"                         // |
-#define CROSS  "\xE2\x94\xBC"                         // +
+void xoaManHinh();
+void veBanCo(BanCo* banCo, int conTroX, int conTroY, NuocDi nuocCuoi, bool veDayDu);
+void inMenuChinh();
+void inMenuKichThuoc();
+void inThongBao(const char* thongBao);
 
-void thiet_lap_console(void);
-void dat_con_tro_ve_dau(void);
-void chon_che_do_choi(int *kich_thuoc, int *so_quan_thang);
-void ve_thanh_trang_thai(int cot_con_tro, int hang_con_tro, char luot);
-void khoi_tao_ban_co(char ban_co[KICH_THUOC_TOI_DA][KICH_THUOC_TOI_DA], int kich_thuoc);
-void hien_thi_ban_co(char ban_co[KICH_THUOC_TOI_DA][KICH_THUOC_TOI_DA], int kich_thuoc, int hang_con_tro, int cot_con_tro, int hang_cuoi, int cot_cuoi);
-
-#endif
+#endif // GIAODIEN_H
