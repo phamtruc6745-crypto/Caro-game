@@ -3,7 +3,7 @@
 
 #define KICH_THUOC_TOI_DA 15
 
-// MÃ u sáº¯c ANSI
+// Màu sắc ANSI
 #define MAU_DO     "\x1b[31m"
 #define MAU_XANH_LA   "\x1b[32m"
 #define MAU_VANG  "\x1b[33m"
