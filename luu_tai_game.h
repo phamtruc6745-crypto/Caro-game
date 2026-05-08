@@ -1,8 +1,13 @@
 #ifndef LUU_TAI_GAME_H
 #define LUU_TAI_GAME_H
+
 #include "cau_truc_du_lieu.h"
-int luu_van_co(const TrangThaiVanCo *t, const char *f);
-int tai_van_co(TrangThaiVanCo *t, const char *f);
-int kiem_tra_co_file_luu(const char *f);
-void in_thong_tin_file_luu(const char *f);
-#endif
+#include "ngan_xep.h"
+#include <stdbool.h>
+
+#define TEP_LUU_GAME "luu_game.bin"
+
+bool luuTrangThaiGame(const char* tenTep, BanCo* banCo, ThongTinNguoiChoi* ng1, ThongTinNguoiChoi* ng2, NguoiChoiHienTai luotHienTai, NganXep* lichSu);
+bool taiTrangThaiGame(const char* tenTep, BanCo* banCo, ThongTinNguoiChoi* ng1, ThongTinNguoiChoi* ng2, NguoiChoiHienTai* luotHienTai, NganXep* lichSu);
+
+#endif // LUU_TAI_GAME_H
