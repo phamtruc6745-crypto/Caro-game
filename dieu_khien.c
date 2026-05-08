@@ -17,7 +17,7 @@ void khoiTaoDieuKhien() {
     DWORD cheDoMoi = cheDoCu;
     cheDoMoi &= ~ENABLE_QUICK_EDIT_MODE;
     cheDoMoi |= ENABLE_WINDOW_INPUT | ENABLE_EXTENDED_FLAGS;
-    cheDoMoi &= ~ENABLE_MOUSE_INPUT; // Äáº£m báº£o táº¯t chuá»™t
+    cheDoMoi &= ~ENABLE_MOUSE_INPUT;
     SetConsoleMode(hDauVao, cheDoMoi);
 }
 
