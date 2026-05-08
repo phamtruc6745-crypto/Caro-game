@@ -1,30 +1,75 @@
 #include "logic_game.h"
+#include <stdio.h>
 
-int dem_huong(char ban_co[KICH_THUOC_TOI_DA][KICH_THUOC_TOI_DA], int kich_thuoc, int hang, int cot, int delta_hang, int delta_cot, char nguoi_choi) {
-    int dem = 0, r = hang + delta_hang, c = cot + delta_cot;
-    while (r >= 0 && r < kich_thuoc && c >= 0 && c < kich_thuoc && ban_co[r][c] == nguoi_choi) {
-        dem++; r += delta_hang; c += delta_cot;
+void khoiTaoBanCo(BanCo* banCo, int kichThuoc, int dkThang) {
+    banCo->kichThuoc = kichThuoc;
+    banCo->dieuKienThang = dkThang;
+    for (int i = 0; i < KICH_THUOC_TOI_DA; i++) {
+        for (int j = 0; j < KICH_THUOC_TOI_DA; j++) {
+            banCo->luoi[i][j] = O_TRONG;
+        }
+    }
+    banCo->soNuocDaDanh = 0;
+}
+
+bool nuocDiHopLe(BanCo* banCo, int x, int y) {
+    if (x < 0 || x >= banCo->kichThuoc || y < 0 || y >= banCo->kichThuoc) return false;
+    if (banCo->luoi[y][x] != O_TRONG) return false;
+    return true;
+}
+
+void danhCo(BanCo* banCo, NuocDi nuoc) {
+    if (nuocDiHopLe(banCo, nuoc.x, nuoc.y)) {
+        banCo->luoi[nuoc.y][nuoc.x] = nuoc.nguoiDanh;
+        banCo->soNuocDaDanh++;
+    }
+}
+
+void hoanTacNuocDi(BanCo* banCo, NuocDi nuoc) {
+    if (nuoc.x >= 0 && nuoc.x < banCo->kichThuoc && nuoc.y >= 0 && nuoc.y < banCo->kichThuoc) {
+        banCo->luoi[nuoc.y][nuoc.x] = O_TRONG;
+        banCo->soNuocDaDanh--;
+    }
+}
+
+int demTheoHuong(BanCo* banCo, NuocDi nuocCuoi, int dx, int dy) {
+    int dem = 0;
+    int x = nuocCuoi.x + dx;
+    int y = nuocCuoi.y + dy;
+    NguoiChoiHienTai nguoi = nuocCuoi.nguoiDanh;
+    
+    while (x >= 0 && x < banCo->kichThuoc && y >= 0 && y < banCo->kichThuoc && banCo->luoi[y][x] == nguoi) {
+        dem++;
+        x += dx;
+        y += dy;
     }
     return dem;
 }
 
-bool kiem_tra_thang(char ban_co[KICH_THUOC_TOI_DA][KICH_THUOC_TOI_DA], int kich_thuoc, int hang_cuoi, int cot_cuoi, char nguoi_choi, int so_quan_thang) {
-    if (hang_cuoi == -1 || cot_cuoi == -1) return false;
-    int dr[] = {0, 1, 1, 1}, dc[] = {1, 0, 1, -1};
+TrangThaiGame kiemTraThangThua(BanCo* banCo, NuocDi nuocCuoi) {
+    if (nuocCuoi.x < 0 || nuocCuoi.y < 0) return DANG_CHOI;
+    
+    int cacHuong[4][2] = {
+        {1, 0},  // Ngang
+        {0, 1},  // Dọc
+        {1, 1},  // Chéo \ .
+        {1, -1}  // Chéo /
+    };
+    
     for (int i = 0; i < 4; i++) {
-        if (1 + dem_huong(ban_co, kich_thuoc, hang_cuoi, cot_cuoi, dr[i], dc[i], nguoi_choi) +
-            dem_huong(ban_co, kich_thuoc, hang_cuoi, cot_cuoi, -dr[i], -dc[i], nguoi_choi) >= so_quan_thang)
-            return true;
+        int dx = cacHuong[i][0];
+        int dy = cacHuong[i][1];
+        
+        int dem = 1 + demTheoHuong(banCo, nuocCuoi, dx, dy) + demTheoHuong(banCo, nuocCuoi, -dx, -dy);
+        
+        if (dem >= banCo->dieuKienThang) {
+            return (nuocCuoi.nguoiDanh == NGUOI_X) ? X_THANG : O_THANG;
+        }
     }
-    return false;
-}
-
-bool thuc_hien_hoan_tac(TrangThaiVanCo *van_co, int *hang_con_tro, int *cot_con_tro) {
-    if (van_co->so_nuoc_da_di <= 0) return false;
-    van_co->so_nuoc_da_di--;
-    MotNuocDi n = van_co->lich_su_nuoc_di[van_co->so_nuoc_da_di];
-    van_co->ban_co[n.hang][n.cot] = ' ';
-    van_co->luot_hien_tai = n.nguoi_danh;
-    *hang_con_tro = n.hang; *cot_con_tro = n.cot;
-    return true;
+    
+    if (banCo->soNuocDaDanh >= banCo->kichThuoc * banCo->kichThuoc) {
+        return HOA_NHAU;
+    }
+    
+    return DANG_CHOI;
 }
