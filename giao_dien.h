@@ -1,7 +1,7 @@
 #ifndef GIAODIEN_H
 #define GIAODIEN_H
 
-#include "cau_truc_du_lieu (1).h"
+#include "cau_truc_du_lieu.h"
 #include <stdbool.h>
 
 void gotoXY(int x, int y);
