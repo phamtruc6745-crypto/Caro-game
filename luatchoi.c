@@ -1,75 +1,45 @@
-#include "luatchoi.h"
+#include "ngan_xep.h"
+#include <stdlib.h>
 #include <stdio.h>
 
-void khoiTaoBanCo(BanCo* banCo, int kichThuoc, int dkThang) {
-    banCo->kichThuoc = kichThuoc;
-    banCo->dieuKienThang = dkThang;
-    for (int i = 0; i < KICH_THUOC_TOI_DA; i++) {
-        for (int j = 0; j < KICH_THUOC_TOI_DA; j++) {
-            banCo->luoi[i][j] = O_TRONG;
-        }
-    }
-    banCo->soNuocDaDanh = 0;
+void khoiTaoNganXep(NganXep* nx) {
+    nx->dinh = NULL;
 }
 
-bool nuocDiHopLe(BanCo* banCo, int x, int y) {
-    if (x < 0 || x >= banCo->kichThuoc || y < 0 || y >= banCo->kichThuoc) return false;
-    if (banCo->luoi[y][x] != O_TRONG) return false;
+bool themVaoNganXep(NganXep* nx, NuocDi nuoc) {
+    NodeNuocDi* nodeMoi = (NodeNuocDi*)malloc(sizeof(NodeNuocDi));
+    if (!nodeMoi) return false;
+    nodeMoi->nuocDi = nuoc;
+    nodeMoi->tiepTheo = nx->dinh;
+    nx->dinh = nodeMoi;
     return true;
 }
 
-void danhCo(BanCo* banCo, NuocDi nuoc) {
-    if (nuocDiHopLe(banCo, nuoc.x, nuoc.y)) {
-        banCo->luoi[nuoc.y][nuoc.x] = nuoc.nguoiDanh;
-        banCo->soNuocDaDanh++;
+bool layKhoiNganXep(NganXep* nx, NuocDi* nuoc) {
+    if (nganXepRong(nx)) return false;
+    NodeNuocDi* tam = nx->dinh;
+    *nuoc = tam->nuocDi;
+    nx->dinh = tam->tiepTheo;
+    free(tam);
+    return true;
+}
+
+bool nganXepRong(NganXep* nx) {
+    return nx->dinh == NULL;
+}
+
+void xoaNganXep(NganXep* nx) {
+    NuocDi nuoc;
+    while (!nganXepRong(nx)) {
+        layKhoiNganXep(nx, &nuoc);
     }
 }
 
-void hoanTacNuocDi(BanCo* banCo, NuocDi nuoc) {
-    if (nuoc.x >= 0 && nuoc.x < banCo->kichThuoc && nuoc.y >= 0 && nuoc.y < banCo->kichThuoc) {
-        banCo->luoi[nuoc.y][nuoc.x] = O_TRONG;
-        banCo->soNuocDaDanh--;
+void daoNguocNganXep(NganXep* dich, NganXep* nguon) {
+    khoiTaoNganXep(dich);
+    NodeNuocDi* hienTai = nguon->dinh;
+    while (hienTai != NULL) {
+        themVaoNganXep(dich, hienTai->nuocDi);
+        hienTai = hienTai->tiepTheo;
     }
-}
-
-int demTheoHuong(BanCo* banCo, NuocDi nuocCuoi, int dx, int dy) {
-    int dem = 0;
-    int x = nuocCuoi.x + dx;
-    int y = nuocCuoi.y + dy;
-    NguoiChoiHienTai nguoi = nuocCuoi.nguoiDanh;
-    
-    while (x >= 0 && x < banCo->kichThuoc && y >= 0 && y < banCo->kichThuoc && banCo->luoi[y][x] == nguoi) {
-        dem++;
-        x += dx;
-        y += dy;
-    }
-    return dem;
-}
-
-TrangThaiGame kiemTraThangThua(BanCo* banCo, NuocDi nuocCuoi) {
-    if (nuocCuoi.x < 0 || nuocCuoi.y < 0) return DANG_CHOI;
-    
-    int cacHuong[4][2] = {
-        {1, 0},  // Ngang
-        {0, 1},  // Dá»c
-        {1, 1},  // ChÃ©o \ .
-        {1, -1}  // ChÃ©o /
-    };
-    
-    for (int i = 0; i < 4; i++) {
-        int dx = cacHuong[i][0];
-        int dy = cacHuong[i][1];
-        
-        int dem = 1 + demTheoHuong(banCo, nuocCuoi, dx, dy) + demTheoHuong(banCo, nuocCuoi, -dx, -dy);
-        
-        if (dem >= banCo->dieuKienThang) {
-            return (nuocCuoi.nguoiDanh == NGUOI_X) ? X_THANG : O_THANG;
-        }
-    }
-    
-    if (banCo->soNuocDaDanh >= banCo->kichThuoc * banCo->kichThuoc) {
-        return HOA_NHAU;
-    }
-    
-    return DANG_CHOI;
 }
