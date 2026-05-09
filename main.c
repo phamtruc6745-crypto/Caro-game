@@ -120,34 +120,40 @@ void vaoGame(bool daTaiGame, int kichThuoc, int dkThang) {
             }
         }
         else if (sk.phim == PHIM_SAVE) {
+            int yPos = 13 + 2 * banCoChoi.kichThuoc;
+            gotoXY(0, yPos);
             if (luuTrangThaiGame(TEP_LUU_GAME, &banCoChoi, &nguoi1, &nguoi2, luotHienTai, &lichSuNuocDi)) {
-                printf("\nDa luu game thanh cong! Nhan Space de tiep tuc...");
+                printf("%s" MAU_XANH_LA "Da luu game thanh cong! Nhan Space de tiep tuc..." DAT_LAI_MAU, GOC_TRAI);
                 while(layLenhDieuKhien().phim != PHIM_SPACE);
             } else {
-                printf("\nLoi luu game! Nhan Space de tiep tuc...");
+                printf("%s" MAU_DO "Loi luu game! Nhan Space de tiep tuc..." DAT_LAI_MAU, GOC_TRAI);
                 while(layLenhDieuKhien().phim != PHIM_SPACE);
             }
+            xoaManHinh();
         }
         else if (sk.phim == PHIM_DAU_HANG) {
-            printf("\n%s muon dau hang? (Y: Co / N: Khong): ", (luotHienTai == NGUOI_X) ? nguoi1.ten : nguoi2.ten);
+            int yPos = 13 + 2 * banCoChoi.kichThuoc;
+            gotoXY(0, yPos);
+            printf("%s%s muon dau hang? (Y: Co / N: Khong): ", GOC_TRAI, (luotHienTai == NGUOI_X) ? nguoi1.ten : nguoi2.ten);
             if (layLenhDieuKhien().phim == PHIM_Y) {
                 trangThai = (luotHienTai == NGUOI_X) ? X_DAU_HANG : O_DAU_HANG;
             } else {
-                gotoXY(0, 44);
-                printf("%s" MAU_XANH_LA "Khong dau hang. Tran dau tiep tuc! Nhan Space...", GOC_TRAI);
+                gotoXY(0, yPos);
+                printf("%s" MAU_XANH_LA "Khong dau hang. Tran dau tiep tuc! Nhan Space..." DAT_LAI_MAU "          ", GOC_TRAI);
                 while(layLenhDieuKhien().phim != PHIM_SPACE);
                 xoaManHinh();
             }
         }
         else if (sk.phim == PHIM_XIN_HOA) {
-            gotoXY(0, 44);
-            printf("%s xin hoa. %s co dong y khong? (Y: Co / N: Khong): ", 
+            int yPos = 13 + 2 * banCoChoi.kichThuoc;
+            gotoXY(0, yPos);
+            printf("%s%s xin hoa. %s co dong y khong? (Y: Co / N: Khong): ", GOC_TRAI,
                 (luotHienTai == NGUOI_X) ? nguoi1.ten : nguoi2.ten,
                 (luotHienTai == NGUOI_X) ? nguoi2.ten : nguoi1.ten);
             if (layLenhDieuKhien().phim == PHIM_Y) {
                 trangThai = HOA_NHAU;
             } else {
-                gotoXY(0, 44);
+                gotoXY(0, yPos);
                 printf("%s" MAU_DAM MAU_DO "Loi de nghi bi tu choi. Tiep tuc chien dau! Nhan Space..." DAT_LAI_MAU "          ", GOC_TRAI);
                 while(layLenhDieuKhien().phim != PHIM_SPACE);
                 xoaManHinh();
@@ -163,19 +169,19 @@ void vaoGame(bool daTaiGame, int kichThuoc, int dkThang) {
         veBanCo(&banCoChoi, -1, -1, nuocCuoi, 
                (luotHienTai == NGUOI_X) ? nguoi1.ten : nguoi2.ten, luotHienTai);
         if (trangThai == X_THANG) {
-            printf("\n%s" MAU_DAM MAU_VANG "Nguoi choi %s (X) DA CHIEN THANG!\n" DAT_LAI_MAU, GOC_TRAI, nguoi1.ten);
+            printf("\n%s" MAU_DAM MAU_VANG "Nguoi choi %s (X) DA CHIEN THANG!" DAT_LAI_MAU "\n", GOC_TRAI, nguoi1.ten);
             nguoi1.thang++; nguoi2.thua++;
         } else if (trangThai == O_THANG) {
-            printf("\n%s" MAU_DAM MAU_VANG "Nguoi choi %s (O) DA CHIEN THANG!\n" DAT_LAI_MAU, GOC_TRAI, nguoi2.ten);
+            printf("\n%s" MAU_DAM MAU_VANG "Nguoi choi %s (O) DA CHIEN THANG!" DAT_LAI_MAU "\n", GOC_TRAI, nguoi2.ten);
             nguoi2.thang++; nguoi1.thua++;
         } else if (trangThai == X_DAU_HANG) {
-            printf("\n%s" MAU_DAM MAU_DO "Nguoi choi %s (X) DA DAU HANG! %s (O) THANG!\n" DAT_LAI_MAU, GOC_TRAI, nguoi1.ten, nguoi2.ten);
+            printf("\n%s" MAU_DAM MAU_DO "Nguoi choi %s (X) DA DAU HANG! %s (O) THANG!" DAT_LAI_MAU "\n", GOC_TRAI, nguoi1.ten, nguoi2.ten);
             nguoi2.thang++; nguoi1.thua++;
         } else if (trangThai == O_DAU_HANG) {
-            printf("\n%s" MAU_DAM MAU_DO "Nguoi choi %s (O) DA DAU HANG! %s (X) THANG!\n" DAT_LAI_MAU, GOC_TRAI, nguoi2.ten, nguoi1.ten);
+            printf("\n%s" MAU_DAM MAU_DO "Nguoi choi %s (O) DA DAU HANG! %s (X) THANG!" DAT_LAI_MAU "\n", GOC_TRAI, nguoi2.ten, nguoi1.ten);
             nguoi1.thang++; nguoi2.thua++;
         } else if (trangThai == HOA_NHAU) {
-            printf("\n%s" MAU_DAM MAU_XANH_NGOC "HAI BEN HOA NHAU!\n" DAT_LAI_MAU, GOC_TRAI);
+            printf("\n%s" MAU_DAM MAU_XANH_NGOC "HAI BEN HOA NHAU!" DAT_LAI_MAU "\n", GOC_TRAI);
             nguoi1.hoa++; nguoi2.hoa++;
         }
         capNhatBangXepHang(nguoi1);
@@ -215,7 +221,7 @@ void xemLaiGame() {
         luotXemLai = (luotXemLai == NGUOI_X) ? NGUOI_O : NGUOI_X;
         
         gotoXY(0, yThongBao);
-        printf(MAU_XANH_DUONG MAU_DAM "DANG XEM LAI... [Space]: Tiep tuc | [ESC]: Thoat ve Menu" DAT_LAI_MAU "          ");
+        printf("%s" MAU_XANH_DUONG MAU_DAM "DANG XEM LAI... [Space]: Tiep tuc | [ESC]: Thoat ve Menu" DAT_LAI_MAU "          ", GOC_TRAI);
         
         SuKienNhap sk = layLenhDieuKhien();
         if (sk.phim == PHIM_ESC) {
