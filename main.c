@@ -192,6 +192,30 @@ void vaoGame(bool daTaiGame, int kichThuoc, int dkThang) {
     }
 }
 
+// Hàm đệ quy phụ để duyệt ngăn xếp từ đáy lên đỉnh (từ nước đầu đến nước cuối)
+bool thucHienXemLaiDeQuy(NodeNuocDi* node, BanCo* banCoXemLai, int yThongBao) {
+    if (node == NULL) return true; // Điểm dừng: Đã qua nước đi đầu tiên
+
+    // 1. Bước đệ quy: Đi sâu xuống để tìm nước đi trước đó
+    if (!thucHienXemLaiDeQuy(node->tiepTheo, banCoXemLai, yThongBao)) return false;
+
+    // 2. Phần xử lý (chạy khi quay ngược từ đệ quy lên): Hiển thị nước đi hiện tại
+    danhCo(banCoXemLai, node->nuocDi);
+    veBanCo(banCoXemLai, -1, -1, node->nuocDi, 
+           (node->nuocDi.nguoiDanh == NGUOI_X) ? nguoi1.ten : nguoi2.ten, 
+           node->nuocDi.nguoiDanh);
+    
+    gotoXY(0, yThongBao);
+    printf("%s" MAU_XANH_DUONG MAU_DAM "DANG XEM LAI... [Space]: Tiep tuc | [ESC]: Thoat ve Menu" DAT_LAI_MAU "          ", GOC_TRAI);
+    
+    // Đợi người dùng phản hồi
+    while(1) {
+        SuKienNhap sk = layLenhDieuKhien();
+        if (sk.phim == PHIM_SPACE) return true; // Tiếp tục nước tiếp theo
+        if (sk.phim == PHIM_ESC) return false;   // Thoát ngay lập tức
+    }
+}
+
 void xemLaiGame() {
     khoiTaoDieuKhien();
     if (nganXepRong(&lichSuNuocDi)) {
@@ -204,31 +228,12 @@ void xemLaiGame() {
     BanCo banCoXemLai;
     khoiTaoBanCo(&banCoXemLai, banCoChoi.kichThuoc, banCoChoi.dieuKienThang);
     
-    NganXep nganXepTam;
-    daoNguocNganXep(&nganXepTam, &lichSuNuocDi);
-    
     xoaManHinh();
-    NuocDi nuoc;
-    int yThongBao = banCoChoi.kichThuoc * 2 + 12; // Vị trí dưới bàn cờ
-    NguoiChoiHienTai luotXemLai = NGUOI_X; // Mặc định quân X đi trước
+    int yThongBao = banCoChoi.kichThuoc * 2 + 12; 
 
-    while(layKhoiNganXep(&nganXepTam, &nuoc)) {
-        danhCo(&banCoXemLai, nuoc);
-        veBanCo(&banCoXemLai, -1, -1, nuoc, 
-               (luotXemLai == NGUOI_X) ? nguoi1.ten : nguoi2.ten, luotXemLai);
-        
-        // Đổi lượt cho nước tiếp theo trong Replay
-        luotXemLai = (luotXemLai == NGUOI_X) ? NGUOI_O : NGUOI_X;
-        
-        gotoXY(0, yThongBao);
-        printf("%s" MAU_XANH_DUONG MAU_DAM "DANG XEM LAI... [Space]: Tiep tuc | [ESC]: Thoat ve Menu" DAT_LAI_MAU "          ", GOC_TRAI);
-        
-        SuKienNhap sk = layLenhDieuKhien();
-        if (sk.phim == PHIM_ESC) {
-            xoaNganXep(&nganXepTam);
-            break;
-        }
-    }
+    // Gọi hàm đệ quy bắt đầu từ đỉnh ngăn xếp (nước mới nhất)
+    // Nhưng vì đệ quy gọi trước khi xử lý, nó sẽ xử lý từ đáy (nước cũ nhất) lên.
+    thucHienXemLaiDeQuy(lichSuNuocDi.dinh, &banCoXemLai, yThongBao);
 }
 
 void khoiPhucConsole() {
