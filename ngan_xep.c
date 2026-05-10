@@ -28,11 +28,15 @@ bool nganXepRong(NganXep* nx) {
     return nx->dinh == NULL;
 }
 
+void giaiPhongNodeDeQuy(NodeNuocDi* node) {
+    if (node == NULL) return;
+    giaiPhongNodeDeQuy(node->tiepTheo);
+    free(node);
+}
+
 void xoaNganXep(NganXep* nx) {
-    NuocDi nuoc;
-    while (!nganXepRong(nx)) {
-        layKhoiNganXep(nx, &nuoc);
-    }
+    giaiPhongNodeDeQuy(nx->dinh);
+    nx->dinh = NULL;
 }
 
 void daoNguocNganXep(NganXep* dich, NganXep* nguon) {
