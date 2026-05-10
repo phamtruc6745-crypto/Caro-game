@@ -51,9 +51,9 @@ TrangThaiGame kiemTraThangThua(BanCo* banCo, NuocDi nuocCuoi) {
     
     int cacHuong[4][2] = {
         {1, 0},  // Ngang
-        {0, 1},  // Dọc
-        {1, 1},  // Chéo \ .
-        {1, -1}  // Chéo /
+        {0, 1},  // Dá»c
+        {1, 1},  // ChĂ©o \ .
+        {1, -1}  // ChĂ©o /
     };
     
     for (int i = 0; i < 4; i++) {
