@@ -92,11 +92,11 @@ void inMenuChinh() {
     for(int i=0; i<32; i++) printf("\xE2\x95\x90");
     printf("\xE2\x95\xA3\n" DAT_LAI_MAU);
     
-    printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[1]" DAT_LAI_MAU " Choi Moi (Kich thuoc)      " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
-    printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[2]" DAT_LAI_MAU " Tiep tuc (Load Game)       " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
+    printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[1]" DAT_LAI_MAU " Choi Moi (New game)        " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
+    printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[2]" DAT_LAI_MAU " Tiep tuc (Continue)        " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
     printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[3]" DAT_LAI_MAU " Xem lai (Replay)           " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
-    printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[4]" DAT_LAI_MAU " Bang xep hang              " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
-    printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_DO        MAU_DAM "[5]" DAT_LAI_MAU " Thoat                      " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
+    printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[4]" DAT_LAI_MAU " Bang xep hang (Rankings)   " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
+    printf("%s" MAU_VANG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_DO        MAU_DAM "[5]" DAT_LAI_MAU " Thoat (Exit)               " MAU_VANG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
     
     printf("%s" MAU_VANG "\xE2\x95\x9A", p);
     for(int i=0; i<32; i++) printf("\xE2\x95\x90");
@@ -123,9 +123,9 @@ void inMenuChonKichThuoc() {
     for(int i=0; i<36; i++) printf("\xE2\x95\x90");
     printf("\xE2\x95\xA3\n" DAT_LAI_MAU);
     
-    printf("%s" MAU_XANH_DUONG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_LA  MAU_DAM "[1]" DAT_LAI_MAU " 3x3   (Thang khi 3 quan)     " MAU_XANH_DUONG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
-    printf("%s" MAU_XANH_DUONG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[2]" DAT_LAI_MAU " 5x5   (Thang khi 4 quan)     " MAU_XANH_DUONG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
-    printf("%s" MAU_XANH_DUONG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_DO        MAU_DAM "[3]" DAT_LAI_MAU " 15x15 (Thang khi 5 quan)     " MAU_XANH_DUONG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
+    printf("%s" MAU_XANH_DUONG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_LA  MAU_DAM "[1]" DAT_LAI_MAU " 3x3   (Thang khi 3 quan)       " MAU_XANH_DUONG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
+    printf("%s" MAU_XANH_DUONG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_XANH_DUONG MAU_DAM "[2]" DAT_LAI_MAU " 5x5   (Thang khi 4 quan)       " MAU_XANH_DUONG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
+    printf("%s" MAU_XANH_DUONG "\xE2\x95\x91" DAT_LAI_MAU " " MAU_DO        MAU_DAM "[3]" DAT_LAI_MAU " 15x15 (Thang khi 5 quan)       " MAU_XANH_DUONG "\xE2\x95\x91\n" DAT_LAI_MAU, p);
     
     printf("%s" MAU_XANH_DUONG "\xE2\x95\x9A", p);
     for(int i=0; i<36; i++) printf("\xE2\x95\x90");
@@ -137,4 +137,3 @@ void inMenuChonKichThuoc() {
 void inThongBao(const char* thongBao) {
     printf("%s%s\n", GOC_TRAI, thongBao);
 }
-
